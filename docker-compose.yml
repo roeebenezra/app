@@ -1,14 +1,13 @@
 services:
   app:
-    build: .
+    build: 
+      context: ./app
     deploy:
       replicas: 3
     environment:
       - FLASK_APP=app.py
     networks:
       - app_network
-    volumes:
-      - ./app-docker:/app-docker
     logging:
       driver: "json-file"
       options:
@@ -29,10 +28,11 @@ services:
 
   nginx:
     image: nginx:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+    container_name: nginx
     ports:
       - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - app_network
 
